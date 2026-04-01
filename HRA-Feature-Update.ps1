@@ -9,7 +9,7 @@ $launchUrl = "https://hra-it.github.io/april-fools/"
 [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
 
 $xml = @"
-<toast launch="$launchUrl" activationType="protocol" scenario="alarm">
+<toast launch="$launchUrl" activationType="protocol" scenario="incomingCall" duration="long">
   <visual>
     <binding template="ToastGeneric">
       <text>HRA Feature Update</text>
@@ -17,6 +17,7 @@ $xml = @"
     </binding>
     <actions>
       <action content="View Details" arguments="$launchUrl" activationType="protocol"/>
+      <action content="Dismiss" arguments="dismiss" activationType="system" hint-inputId="dismiss"/>
     </actions>
   </visual>
 </toast>
