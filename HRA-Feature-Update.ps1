@@ -1,3 +1,8 @@
+# Don't run after 10pm PST
+$pst = [System.TimeZoneInfo]::FindSystemTimeZoneById("Pacific Standard Time")
+$currentPST = [System.TimeZoneInfo]::ConvertTimeFromUtc([System.DateTime]::UtcNow, $pst)
+if ($currentPST.Hour -ge 22) { exit 0 }
+
 $launchUrl = "https://hra-it.github.io/april-fools/"
 
 [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
