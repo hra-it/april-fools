@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HRA Device Management</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* WIPE SCREEN */
+    #wipe-screen {
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .warning-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ff3b3b;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 40px;
+    }
+
+    .device-info {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 20px 40px;
+      margin-bottom: 40px;
+      text-align: left;
+      display: inline-block;
+      min-width: 360px;
+    }
+
+    .device-info p {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .device-info span {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .progress-container {
+      margin-bottom: 30px;
+    }
+
+    .progress-bar {
+      width: 400px;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 0 auto 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff3b3b, #ff8c00);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 1s linear;
+    }
+
+    .progress-label {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .countdown {
+      font-size: 5rem;
+      font-weight: 800;
+      color: #ff3b3b;
+      line-height: 1;
+      margin-bottom: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .countdown-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .status-text {
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    /* REVEAL SCREEN */
+    #reveal-screen {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    #reveal-screen h1 {
+      font-size: 3rem;
+      color: #00d4aa;
+      margin-bottom: 15px;
+    }
+
+    #reveal-screen p {
+      font-size: 1.1rem;
+      color: #aaa;
+      margin-bottom: 10px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .signature {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .signature span {
+      color: #00d4aa;
+      font-weight: 600;
+    }
+
+    /* Scanline effect */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WIPE SCREEN -->
+  <div id="wipe-screen">
+    <div class="warning-icon">⚠️</div>
+    <h1>REMOTE WIPE INITIATED</h1>
+    <p class="subtitle">Horizon Realty Advisors — IT Device Management</p>
+
+    <div class="device-info">
+      <p>Device: <span id="device-name">Loading...</span></p>
+      <p>User: <span id="user-name">Loading...</span></p>
+      <p>Policy: <span>HRA-SEC-WIPE-001</span></p>
+      <p>Initiated by: <span>IT Department</span></p>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-label">Erasing all data...</div>
+    </div>
+
+    <div class="countdown" id="countdown">5</div>
+    <div class="countdown-label">seconds remaining</div>
+
+    <div class="status-text" id="status-text">Preparing to wipe device storage...</div>
+  </div>
+
+  <!-- REVEAL SCREEN -->
+  <div id="reveal-screen">
+    <h1>April Fools!</h1>
+    <p>Your device is fine. Nothing was wiped.<br/>We just wanted to see your face. 😄</p>
+    <img src="tutu.jpg" alt="April Fools!" style="max-width:600px; width:90%; border-radius:12px; margin: 24px auto; display:block; box-shadow: 0 0 40px rgba(0,212,170,0.3);" />
+    <p>Have a great rest of your day!</p>
+    <div class="signature">— <span>Your IT Department</span></div>
+  </div>
+
+  <script>
+    // Fake device info
+    document.getElementById('device-name').textContent = window.navigator.platform || 'DESKTOP-HRA';
+    document.getElementById('user-name').textContent = 'HRA User';
+
+    const statusMessages = [
+      'Preparing to wipe device storage...',
+      'Revoking access credentials...',
+      'Erasing local files...',
+      'Wiping system partition...',
+      'Finalizing...'
+    ];
+
+    let count = 5;
+    const countdownEl = document.getElementById('countdown');
+    const progressFill = document.getElementById('progress-fill');
+    const statusText = document.getElementById('status-text');
+
+    // Start progress bar immediately
+    setTimeout(() => { progressFill.style.width = '20%'; }, 50);
+
+    const interval = setInterval(() => {
+      count--;
+      countdownEl.textContent = count;
+      progressFill.style.width = ((5 - count) / 5 * 100) + '%';
+      statusText.textContent = statusMessages[5 - count - 1] || 'Finalizing...';
+
+      if (count <= 0) {
+        clearInterval(interval);
+        setTimeout(() => {
+          document.getElementById('wipe-screen').style.display = 'none';
+          document.getElementById('reveal-screen').style.display = 'block';
+        }, 500);
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
